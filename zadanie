@@ -1,0 +1,115 @@
+//Definiujemy klase produktu
+class Product
+    {
+        public string Nazwa;
+        public double Cena;
+        public float Ilość;
+
+        public Product(string nazwa, double cena, float ilość)
+        {
+            Nazwa = nazwa;
+            Cena = cena;
+            Ilość = ilość;
+        }
+    }
+
+//Tworzymy liste magazyn
+List<Product> magazyn = new List<Product>();
+
+//Pętla menu
+while (true)
+    {
+        //Opcje ktore dostaje uzytkownik
+        Console.WriteLine("1. Dodaj produkt");
+        Console.WriteLine("2. Usun produkt");
+        Console.WriteLine("3. Wyswietl produkty");
+        Console.WriteLine("4. Akutalizuj produkt");
+        Console.WriteLine("5. Oblicz wartość magazynu");
+        Console.WriteLine("6. Wyjście");
+
+
+        //Odczytanie wyboru uzytkownika
+        ConsoleKeyInfo key = Console.ReadKey();
+        char choice = key.KeyChar;
+
+        //Menu (wyboru)
+        switch (choice)
+        {
+            case '1':
+
+                Console.Clear();
+                Console.WriteLine("Dodawanie nowego produktu.");
+                Console.Write("Podaj nazwę produktu: ");
+                string nazwa = Console.ReadLine();
+
+
+                //Podawanie ceny, jesli wpisane nie jest liczbą to wyskoczy blad
+                Console.Write("Podaj cenę produktu: ");
+                if (!double.TryParse(Console.ReadLine(), out double cena))
+                {
+                    Console.WriteLine("Nieprawidłowa wartość dla ceny. Operacja przerwana.");
+                    return;
+                }
+
+                Console.Write("Podaj ilość produktu: ");
+                if (!float.TryParse(Console.ReadLine(), out float ilosc))
+                {
+                    Console.WriteLine("Nieprawidłowa wartość dla ilości. Operacja przerwana.");
+                    return;
+                }
+
+
+                //Dodawanie produktu do listy z wykorzystaniem danych podanych przez uzytkownika
+                Product nowyProdukt = new Product(nazwa, cena, ilosc);
+                magazyn.Add(nowyProdukt);
+
+                Console.WriteLine("Produkt dodany do magazynu.");
+
+            case '2':
+                Console.Clear();
+                Console.WriteLine("Podaj nazwę produktu do usunięcia: ");
+                string search = Console.ReadLine();
+                Product foundProduct = magazyn.Find(product => product.Nazwa == search);
+                magazyn.Remove(foundProduct);
+
+            case '3':
+                Console.Clear();
+                foreach (Product product in magazyn)
+                {
+                    Console.WriteLine(" Product o nazwie: " + product.Nazwa +
+                        " Kosztuje: " + product.Cena + "zł" +
+                        " Ilość: " + product.Ilość);
+                }
+
+            case '4':
+                Console.Clear();
+                Console.WriteLine("Podaj nazwę produktu do zaktualizowania: ");
+                string search2 = Console.ReadLine();
+                Product foundProduct2 = magazyn.Find(product => product.Nazwa == search2);
+                Console.WriteLine("Podaj nową cenę produktu");
+                double Cena2 = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("Podaj nową ilość produktu");
+                float Ilość2 = Convert.ToSingle(Console.ReadLine());
+                foundProduct2.Cena = Cena2;
+                foundProduct2.Ilość = Ilość2;
+
+            case '5':
+                Console.Clear();
+
+                //tworzymy zmienna calkowitej wartosci i ustawiamy ją na 0
+                double totalValue = 0;
+                //zmienna foreach przechodzi po wszystkich produktach na liscie magazyn
+                foreach (Product product in magazyn)
+                {
+                    // ustawiamy aby zmienna wartosci = cena razy ilosc
+                    totalValue += product.Cena * product.Ilość;
+                }
+                Console.WriteLine("Wartość całego magazynu to: " + totalValue + "zl");
+
+            case '6':
+                Environment.Exit(0);
+                return;
+
+
+        }
+    }
